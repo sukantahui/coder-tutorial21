@@ -1,0 +1,289 @@
+<div id="create-order-div">
+    <div fxLayout="row" fxLayout.xs="column">
+        <!--        Left part-->
+        <div class="child-1" fxFlex="40">
+            <!--            Order form-->
+            <mat-card id="stock-form-div">
+                <form [formGroup] = orderFormMaster>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <div fxFlex="90">
+                            <ng-select [items]="agents"
+                                       bindLabel="agent_name"
+                                       class="custom"
+                                       (change)="agentSelected()"
+                                       bindValue="agent_id"
+                                       formControlName="agent_id"
+                                       placeholder="Select Agent">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <div fxFlex="90">
+                            <ng-select [items]="customers"
+                                       bindLabel="cust_name"
+                                       class="custom"
+                                       (change)="customerSelected($event)"
+                                       bindValue="cust_id"
+                                       formControlName="cust_id"
+                                       placeholder="Select Customer">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <mat-form-field fxFlex="20">
+                            <mat-label>MV</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="cust_mv" placeholder="MV">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="20">
+                            <mat-label>Disc. %</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="lc_discount_percentage" placeholder="LC Discount Percentage">
+                        </mat-form-field>
+                    </div>
+                </form>
+                <form [formGroup] = orderFormDetails>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <div cfxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" fxFlex="30">
+                            <ng-select  [items]="products"
+                                       [virtualScroll]="true"
+                                       bindLabel="product_code"
+                                       class="custom"
+                                       (change)="productSelected($event)"
+                                       bindValue="product_code"
+                                       formControlName="product_code"
+                                       placeholder="Select Product">
+
+                            </ng-select>
+                            <span *ngIf="selectedProduct" [matBadge]="selectedProduct.price_code" matBadgeOverlap="false"></span>
+                        </div>
+
+                        <div cfxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" fxFlex="30">
+                            <ng-select [items]="customerCategories"
+                                       bindLabel="category"
+                                       class="custom"
+                                       (change)="customerCategorySelected($event)"
+                                       bindValue="ID"
+                                       formControlName="customer_category_id"
+                                       placeholder="Select Category">
+
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <mat-form-field fxFlex="10">
+                            <mat-label>LC</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="lc" placeholder="LC">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="10">
+                            <mat-label>Ploss</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="ploss" placeholder="LC">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="10">
+                            <mat-label>Pr. MV</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="product_mv" placeholder="MV">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column"  fxLayoutGap="15px" style="padding-left: 50px">
+                        <mat-form-field fxFlex="10">
+                            <mat-label>Size</mat-label>
+                            <input type="text" class="text-right" matInput formControlName="product_size" placeholder="Size">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="15">
+                            <mat-label>Exp. Gold</mat-label>
+                            <input type="text" class="text-right" matInput formControlName="expected_gold" placeholder="Gold">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="10">
+                            <mat-label>Qty</mat-label>
+                            <input type="number" class="text-right" matInput formControlName="qty" placeholder="Qty">
+                        </mat-form-field>
+                        <div class="example-button-row" fxFlex="40">
+                            <button mat-raised-button color="accent" (click)="addItem()" [disabled]="!orderFormDetails.valid" >Add</button>
+                        </div>
+                    </div>
+                </form>
+            </mat-card>
+            <!--            Order details for Print-->
+            <mat-card *ngIf="printAbleOrderDetails">
+                <div style="text-align: right">
+                    <button
+                            mat-button color="primary"
+                            [printStyle]="printDivStyle"
+                            printSectionId="orderDetailsDiv"
+                            ngxPrint ><mat-icon>print</mat-icon>
+                    </button>
+                </div>
+
+                <!-- {{orderMasterList.cust_name}} -->
+                <div id="orderDetailsDiv">
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <td colspan="4">{{printAbleOrderDetails.customer.cust_name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <td colspan="4">{{printAbleOrderDetails.order_master.order_id}}</td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td colspan="4">{{printAbleOrderDetails.order_master.order_date | date :  "dd/MM/y"}}</td>
+                        </tr>
+                        </thead>
+
+
+                        <tbody>
+                        <tr>
+                            <th class="text-center">SL</th>
+                            <th class="text-center">Product Code</th>
+                            <th class="text-center">Size</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-center">Gold Weight</th>
+                        </tr>
+                        <tr *ngFor="let row of printAbleOrderDetails.order_details; let i = index">
+                            <ng-container *ngIf="true">
+                                <th scope="row">{{i+1}}</th>
+                                <th scope="row">{{row.product_code}}-{{row.price_code}}</th>
+                                <th class="text-center">{{row.prd_size}}</th>
+                                <th class="text-right">{{row.qty}}</th>
+                                <th class="text-right">{{row.gold_wt | number: '1.3'}}</th>
+                            </ng-container>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-card>
+        </div>
+        <!--        Right Part-->
+        <div class="child-2" fxFlex="60">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <form class="example-form">
+                        <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="start" fxLayoutGap="30px" fxLayoutGap.xs="0">
+                            <mat-form-field fxFlex="15">
+                                <input matInput placeholder="Search..." [(ngModel)]="searchTerm" name="search" type="text" autofocus>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="10">
+                                <input matInput placeholder="Items per page" [(ngModel)]="pageSize" name="PageSize" type="text">
+                            </mat-form-field>
+                            <div class="example-button-row" fxFlex="40">
+                                <button mat-raised-button color="accent" (click)="viewOrderList()">View Orders</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <div *ngIf="orderDetails.length>0">
+                        <table  class="table table-bordered table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="text-center">SL</th>
+                                <th class="text-center" >Model</th>
+                                <th class="text-center" >Size</th>
+                                <th class="text-center" >Qty</th>
+                                <th class="text-center" >Exp. Gold</th>
+                                <th class="text-center" >Plan</th>
+                                <th class="text-center" >Ploss</th>
+                                <th class="text-center" >LC</th>
+                                <th class="text-center" >PR. MV</th>
+                                <th class="text-center" >CMV</th>
+                                <th class="text-center" >TMV</th>
+                                <th class="text-center" colspan="2"><fa-icon class="edit" [icon]="faCogs"></fa-icon></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let row of orderDetails; let i = index">
+                                <ng-container *ngIf="true">
+                                    <th scope="row">{{i+1}}</th>
+                                    <td class="text-left">{{row.product_code}}-{{row.price_code}}</td>
+                                    <td class="text-left">{{row.product_size}}</td>
+                                    <td class="text-right">{{row.qty}}</td>
+                                    <td class="text-right">{{row.expected_gold | number: '1.3'}}</td>
+                                    <td class="text-right" >{{row.cust_category.category }}</td>
+                                    <td class="text-right">{{row.ploss}}</td>
+                                    <td class="text-right">{{row.lc}}</td>
+                                    <td class="text-right">{{row.product_mv | number: '1.3'}}</td>
+                                    <td class="text-right">{{row.cust_mv | number: '1.3'}}</td>
+                                    <td class="text-right">{{(row.product_mv+row.cust_mv) | number: '1.3'}}</td>
+                                    <td class="text-right">
+                                        <a [routerLink]="" (click)="populateOrderFormDetails(row , i)"><fa-icon class="edit" [icon]="faPencilAlt"></fa-icon></a>
+                                    </td>
+                                    <td class="text-right">
+                                        <a [routerLink]="" (click)="deleteItem(i)"><fa-icon class="edit" [icon]="faTrashAlt"></fa-icon></a>
+                                    </td>
+
+                                </ng-container>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+
+                            </tfoot>
+                        </table>
+                        <div style="text-align: center">
+                            <div class="example-button-row" fxFlex="20">
+                                <button mat-raised-button color="accent" (click)="clearOrder()" >Clear</button>
+                            </div>
+                            <div class="example-button-row" fxFlex="20">
+                                <button mat-raised-button color="accent" (click)="saveOrder()" >Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+
+
+            <mat-card *ngIf="true">
+                <table  class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th class="text-center">SL</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Order Id</th>
+                        <th class="text-center" >Order Date</th>
+                        <td>View Details</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let row of orderMasterList; let i = index">
+                        <ng-container *ngIf="true">
+                            <th scope="row">{{i+1}}</th>
+                            <th scope="row">{{row.cust_name}}</th>
+                            <td class="text-left">{{row.order_id}}</td>
+                            <td class="text-right">{{row.order_date | date: 'dd-MM-yyyy'}}</td>
+                            <td class="text-center"><button mat-button (click)="viewOrderDetailsByOrderMaster(row.order_autoid)"><i class="bi bi-view-list"></i></button></td>
+                        </ng-container>
+                    </tr>
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </mat-card>
+
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="!isProduction" id="developer-div">
+    <div class="outerContainer">
+        <div fxLayout="row" fxLayoutGap="1px" fxLayout.sm="column" class="container">
+            <div fxLayoutAlign="center center">
+                <pre>
+                    this.orderDetails = {{this.orderFormDetails.value | json}}
+                </pre>
+            </div>
+            <div fxFlex="2 1 auto" fxLayoutAlign="center center">
+                <pre>
+                    orderDetails = {{orderDetails | json}}
+                </pre>
+            </div>
+            <div fxLayoutAlign="center center">3</div>
+            <div fxLayoutAlign="center center">4</div>
+        </div>
+    </div>
+</div>

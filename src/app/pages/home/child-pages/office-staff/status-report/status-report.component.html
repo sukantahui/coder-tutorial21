@@ -1,0 +1,110 @@
+<div id="status-report-div">
+    <mat-card class="example-card">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>Working Status Report</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+            <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start" fxLayoutGap="10px" fxLayoutGap.xs="0">
+                <form [formGroup]="statusReportForm">
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start" fxLayoutGap="10px" fxLayoutGap.xs="0">
+                    <mat-form-field class="example-full-width" fxFlex="30">
+                        <mat-label>Start date (dd/mm/yyyy)</mat-label>
+                        <input matInput [matDatepicker]="startDatePicker" formControlName="start_date" placeholder="dd/mm/yyyy" (dateChange)="startDateChangeEvent($event)">
+                        <mat-datepicker-toggle matSuffix [for]="startDatePicker">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #startDatePicker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" fxFlex="30">
+                        <mat-label>End date (dd/mm/yyyy)</mat-label>
+                        <input matInput [matDatepicker]="endDatePicker" formControlName="end_date" placeholder="dd/mm/yyyy" (dateInput)="dateInputEvent($event)" (dateChange)="endDateChangeEvent($event)">
+                        <mat-datepicker-toggle matSuffix [for]="endDatePicker">
+                            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #endDatePicker></mat-datepicker>
+                    </mat-form-field>
+                    <div class="example-button-row" fxFlex="30">
+                        <button mat-button color="primary" (click)="getReport()">Search</button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div id="report-area" *ngIf = "reportCount>0">
+        <div class="d-flex flex-row bd-highlight mb-3">
+            <div class="p-2 bd-highlight col-8">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th colspan="3">Gold Received Between {{startDate | date: 'dd/MM/yyyy'}} and {{endDate | date: 'dd/MM/yyyy'}}</th>
+                        <th>{{totalGoldReceived}} gm.</th>
+                    </tr>
+                    <tr>
+                        <th>Particulars</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th colspan="2" class="text-center">JOB Details</th>
+                        </tr>
+                        <tr>
+                            <th>Send to Job</th>
+                            <td class="text-right">{{totalGoldSendToJob}} gm.</td>
+                        </tr>
+                        <tr>
+                            <th>Mathakata</th>
+                            <td class="text-right">{{totalGoldReceivedFromJob}} gm.</td>
+                        </tr>
+                        <tr>
+                            <th>Nitric</th>
+                            <td class="text-right">{{totalNitricReceivedFromJob}} gm.</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="text-center">Bill Details</th>
+                        </tr>
+                        <tr>
+                            <th>P Loss</th>
+                            <td class="text-right">{{billTotal.ploss}} gm.</td>
+                        </tr>
+                        <tr>
+                            <th>Labour Charge</th>
+                            <td class="text-right">{{billTotal.lc | currency:'INR':true}}</td>
+                        </tr>
+                        <tr>
+                            <th>Guinea Gold</th>
+                            <td class="text-right">{{billTotal.guinea_gold}}</td>
+                        </tr>
+                        <tr>
+                            <th>Fine Gold</th>
+                            <td class="text-right">{{billTotal.fine_gold}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex col-4 flex-row bd-highlight mb-3">
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="false" id="developer-div">
+    <pre>
+        statusReportForm = {{statusReportForm.value | json}}
+    </pre>
+    <pre>
+        startDate = {{startDate | json}}
+        endDate = {{endDate | json}}
+    </pre>
+    <pre>
+        totalGoldReceived = {{totalGoldReceived | json}}
+    </pre>
+</div>
+
+
