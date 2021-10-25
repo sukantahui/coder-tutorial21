@@ -25,7 +25,7 @@ export class MenuPublicComponent implements OnInit {
             {
               displayName: 'Basic',
               iconName: 'star_rate',
-              route: 'what-up-web'
+              route: 'BasicC'
             },
             {
               displayName: 'Medium',

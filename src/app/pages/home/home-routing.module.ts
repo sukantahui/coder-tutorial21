@@ -5,6 +5,7 @@ import { HomeComponent } from './home.component';
 const routes: Routes = [
                           { path: '', component: HomeComponent,
                             children: [
+                                { path: 'BasicC', loadChildren: () => import('./child-pages/basic-c/basic-c.module').then(m => m.BasicCModule) },
                             ]
                           },
                           // { path: '404', loadChildren: () => import('./home-not-found/home-not-found.module')
