@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../../../services/auth.service';
-import {NavItem} from '../menu-owner/menu-owner.component';
+import {NavItem} from '../../../../models/nav-item';
+
 
 @Component({
   selector: 'app-menu-public',
