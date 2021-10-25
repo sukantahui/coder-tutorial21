@@ -14,19 +14,45 @@ export class MenuPublicComponent implements OnInit {
     showLogin = false;
   navItems: NavItem[] = [
     {
-      displayName: 'Public 1',
+      displayName: 'Language',
       iconName: 'close',
       children: [
         {
-          displayName: 'Michael Prentice',
+          displayName: 'C',
           iconName: 'person',
           route: 'michael-prentice',
           children: [
-
+            {
+              displayName: 'Basic',
+              iconName: 'star_rate',
+              route: 'what-up-web'
+            },
+            {
+              displayName: 'Medium',
+              iconName: 'star_rate',
+              route: 'what-up-web'
+            },
+            {
+              displayName: 'Advance',
+              iconName: 'star_rate',
+              route: 'what-up-web'
+            }
           ]
         },
         {
-          displayName: 'Stephen Fluin',
+          displayName: 'Python',
+          iconName: 'person',
+          route: 'stephen-fluin',
+          children: [
+            {
+              displayName: 'What\'s up with the Web?',
+              iconName: 'star_rate',
+              route: 'what-up-web'
+            }
+          ]
+        },
+        {
+          displayName: 'Java',
           iconName: 'person',
           route: 'stephen-fluin',
           children: [
