@@ -19,22 +19,22 @@ export class MenuPublicComponent implements OnInit {
       children: [
         {
           displayName: 'C',
-          iconName: 'person',
+          iconName: 'toc',
           route: 'michael-prentice',
           children: [
             {
               displayName: 'Basic',
-              iconName: 'star_rate',
+              iconName: 'brightness_3',
               route: 'BasicC'
             },
             {
               displayName: 'Medium',
-              iconName: 'star_rate',
+              iconName: 'brightness_2',
               route: 'what-up-web'
             },
             {
               displayName: 'Advance',
-              iconName: 'star_rate',
+              iconName: 'brightness_1',
               route: 'what-up-web'
             }
           ]
